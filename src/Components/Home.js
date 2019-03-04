@@ -60,7 +60,6 @@ class Home extends Component {
                 style={{padding: "2vw"}}
               >
                 <Typography 
-                  // variant = "subtitle1" 
                   style={{fontWeight: "bold", textDecoration: "none"}} 
                   component = {Link}
                   to = "/events"
@@ -74,8 +73,7 @@ class Home extends Component {
                 style={{padding: "2vw"}}
                 className="paperStyle" 
               >
-                <Typography 
-                  // variant = "subtitle1" 
+                <Typography
                   style={{fontWeight: "bold", textDecoration: "none"}}
                   component={Link}
                   to = "/workshop"
@@ -85,7 +83,11 @@ class Home extends Component {
               </Paper>
             </Grid>
           </Grid>
+          <span style={{marginBottom: "0px"}}>❤</span>     
         </Grid>
+        {/*  <Grid container direction="row" justify="center" alignItems="flex-end" style={{marginBottom: "0px"}}> */}
+          
+          {/* </Grid> */}
       </div>
     );
   }
