@@ -9,37 +9,47 @@ import StateContext from '../Context/StateContext';
 class Home extends Component {
   static contextType = StateContext;
 
-  componentDidMount = () => {
-    console.log("home", this.context);
-  }
-
   render() {
     return (
       <div>
         <Particles className = "particleProps" params = {ParticleParams}/>
         <Grid container direction="row" justify="center" alignItems="center">
           <Grid container justify="flex-end">
-            <Button 
+            {this.context.isLoggedIn ? (
+              <Button 
+              style = {{margin: "1em"}}
+              variant = "contained" 
+              size = "small" 
+              color = "secondary"
+              onClick = {this.context.onLogout}
+            >
+              logout
+            </Button>
+            ) : (
+            <div>
+              <Button 
               style = {{margin: "1em", marginRight: "-0.5em"}}
               variant = "contained" 
               size = "small" 
               color = "secondary"
               component = {Link}
               to = "/register"
-            >
-              register
-            </Button>
-            <Button
-              style = {{margin: "1em"}}
-              variant = "contained" 
-              size = "small" 
-              color = "primary"
-              to = "/login"
-              component = {Link}
-            >
-              login
-            </Button>
-          </Grid>        
+              >
+                register
+              </Button>
+              <Button
+                style = {{margin: "1em"}}
+                variant = "contained" 
+                size = "small" 
+                color = "primary"
+                to = "/login"
+                component = {Link}
+              >
+                login
+              </Button>
+            </div>
+            )}
+          </Grid> 
           <Grid item style ={{marginTop:"10vw"}}>
             <Typography 
               variant = "h2"
@@ -82,12 +92,8 @@ class Home extends Component {
                 </Typography>
               </Paper>
             </Grid>
-          </Grid>
-          <span style={{marginBottom: "0px"}}>❤</span>     
+          </Grid>    
         </Grid>
-        {/*  <Grid container direction="row" justify="center" alignItems="flex-end" style={{marginBottom: "0px"}}> */}
-          
-          {/* </Grid> */}
       </div>
     );
   }

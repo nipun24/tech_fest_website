@@ -6,6 +6,8 @@ export default React.createContext({
         email: '',
         password: ''
     },
-    onRegister: () => {}
-
+    isLoggedIn: false,
+    onRegister: () => {},
+    onLogin: () => {},
+    onLogout: () => {}
 })

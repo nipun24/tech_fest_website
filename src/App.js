@@ -16,7 +16,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
+      isLoggedIn: false
     };
   }
 
@@ -27,8 +28,7 @@ class App extends Component {
   authListener = () => {
     db.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({user});
-        console.log("authlisterner",this.state.user);
+        this.setState({isLoggedIn: true});
       } else {
         console.log(user);
       }
@@ -36,36 +36,43 @@ class App extends Component {
   }
 
   onRegister = (name,email,password) => {
-    db.auth().createUserWithEmailAndPassword(email,password).then(res => {
+    db.auth().createUserWithEmailAndPassword(email,password)
+    .then(res => {
       db.database().ref('users/'+ res.user.uid).set({
         username: name,
         email: email
-      })
-    }).catch(error => {
-      console.log(error);
-    });
-    // var user = db.auth().currentUser;
-    // console.log(user);
-    // db.database().ref('users/'+ 1).set({
-    //   username: name,
-    //   email: email,
-    //   password: password
-    // });
+      });
+      this.setState({isLoggedIn: true})
+    })
+    .catch(error => {console.log(error)});
   }
 
-  //template for firebase database write
+  onLogin = (email,password) => {
+    db.auth().signInWithEmailAndPassword(email, password)
+    .then(res => {
+      this.setState({isLoggedIn: true});
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
 
-  // db.database().ref('users/'+ 1).set({
-  //   username: name,
-  //   email: email,
-  //   password: password
-  // });
+  onLogout = () => {
+    db.auth().signOut().then(res => {
+      this.setState({isLoggedIn: false})
+    }).catch(function(error) {
+      console.log(error);
+    });
+  }
 
   render() {
     return (
       <StateContext.Provider value = {{
         user: this.state.user,
-        onRegister: this.onRegister
+        isLoggedIn: this.state.isLoggedIn,
+        onRegister: this.onRegister,
+        onLogin: this.onLogin,
+        onLogout: this.onLogout
       }}
       >
         <BrowserRouter>

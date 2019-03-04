@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {TextField, Button} from '@material-ui/core';
 import StateContext from '../Context/StateContext';
+import {Redirect} from 'react-router-dom';
 
 class Register extends Component {
     constructor(props) {
@@ -26,40 +27,47 @@ class Register extends Component {
     }
 
     render() {
-        return(
-            <div>
-                <TextField
-                label="Name"
-                type="text"
-                margin="normal"
-                variant="outlined"
-                onChange={this.onNameChange}
-                />
-                <TextField
-                label="Email"
-                type="email"
-                autoComplete="email"
-                margin="normal"
-                variant="outlined"
-                onChange={this.onEmailChange}
-                />
-                <TextField
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                margin="normal"
-                variant="outlined"
-                onChange={this.onPasswordChange}
-                />
-                <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={() => this.context.onRegister(this.name,this.email,this.password)}
-                >
-                    Register
-                </Button>
-            </div>
-        );
+        if(this.context.isLoggedIn){
+            return(
+                <Redirect to = '/'/>
+            );
+        }
+        else{
+            return(
+                <div>
+                    <TextField
+                    label="Name"
+                    type="text"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={this.onNameChange}
+                    />
+                    <TextField
+                    label="Email"
+                    type="email"
+                    autoComplete="email"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={this.onEmailChange}
+                    />
+                    <TextField
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={this.onPasswordChange}
+                    />
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        onClick={() => this.context.onRegister(this.name,this.email,this.password)}
+                    >
+                        Register
+                    </Button>
+                </div>
+            );
+        }
       }
 }
 
