@@ -17,7 +17,9 @@ class App extends Component {
     super(props);
     this.state = {
       user: {},
-      isLoggedIn: false
+      status: "loading",
+      message: '',
+      open: false
     };
   }
 
@@ -28,51 +30,88 @@ class App extends Component {
   authListener = () => {
     db.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({isLoggedIn: true});
+        this.setState({status: "true"});
       } else {
-        console.log(user);
+        this.setState({status: "false"}); 
       }
     });
   }
 
   onRegister = (name,email,password) => {
+    this.setState({status: "loading"});
     db.auth().createUserWithEmailAndPassword(email,password)
     .then(res => {
       db.database().ref('users/'+ res.user.uid).set({
+        id: Math.floor(Math.random()*10000),
         username: name,
         email: email
       });
-      this.setState({isLoggedIn: true})
     })
-    .catch(error => {console.log(error)});
+    .then(res => {
+      this.setState({
+        status: "true",
+        open: true,
+        message: "Registration Successful !"
+      });
+    })
+    .catch(error => {
+      this.setState({
+        status: "false",
+        open: true,
+        message: `${error}`
+      });
+    });
   }
 
   onLogin = (email,password) => {
+    this.setState({status: "loading"});
     db.auth().signInWithEmailAndPassword(email, password)
     .then(res => {
-      this.setState({isLoggedIn: true});
+      this.setState({
+        status: "true",
+        open: true,
+        message: "Login Successful !"
+      });
     })
     .catch(error => {
-      console.log(error);
+      this.setState({
+        status: "false",
+        open: true,
+        message: `${error}`
+      });
     });
   }
 
   onLogout = () => {
-    db.auth().signOut().then(res => {
-      this.setState({isLoggedIn: false})
-    }).catch(function(error) {
+    this.setState({status: "loading"})
+    db.auth().signOut()
+    .then(res => {
+      this.setState({
+        status: "false",
+        open: true,
+        message: "You have been successfully logged out !"
+      });
+    })
+    .catch(function(error) {
       console.log(error);
     });
+  }
+
+  handleClose = () => {
+    this.setState({open: false});
   }
 
   render() {
     return (
       <StateContext.Provider value = {{
         user: this.state.user,
-        isLoggedIn: this.state.isLoggedIn,
+        status: this.state.status,
+        message: this.state.message,
+        open: this.state.open,
         onRegister: this.onRegister,
         onLogin: this.onLogin,
-        onLogout: this.onLogout
+        onLogout: this.onLogout,
+        handleClose: this.handleClose
       }}
       >
         <BrowserRouter>

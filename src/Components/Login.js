@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {TextField, Button} from '@material-ui/core';
+import {TextField, Button, CircularProgress, Snackbar} from '@material-ui/core';
 import StateContext from '../Context/StateContext';
 import {Redirect} from 'react-router-dom';
 
@@ -22,14 +22,29 @@ class Login extends Component {
     }
 
     render() {
-      if(this.context.isLoggedIn){
+      if(this.context.status === "true"){
         return(
           <Redirect to = "/"/>
+        );
+      }
+      else if(this.context.status === "loading"){
+        return(
+          <CircularProgress />
         );
       }
       else{
         return(
           <div>
+              <Snackbar 
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+                }}
+                open = {this.context.open}
+                autoHideDuration = {3000}
+                onClose = {this.context.handleClose}
+                message = {<span>{this.context.message}</span>}
+              />
               <TextField
               label="Email"
               type="email"

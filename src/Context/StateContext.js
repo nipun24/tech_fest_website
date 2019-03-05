@@ -6,7 +6,10 @@ export default React.createContext({
         email: '',
         password: ''
     },
-    isLoggedIn: false,
+    status: "flase",
+    message: '',
+    open: false,
+    snackbarMessage: () => {},
     onRegister: () => {},
     onLogin: () => {},
     onLogout: () => {}
